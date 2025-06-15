@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ছাব্বির হেলথ কেয়ার</title>
+  <style>
+    body {
+      font-family: 'Noto Sans Bengali', sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 15px;
+      background: #f5f5f5;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    h1 {
+      color: #0d6efd;
+    }
+    button {
+      background-color: #0d6efd;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:disabled {
+      background-color: gray;
+      cursor: not-allowed;
+    }
+    section {
+      background: white;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px #ccc;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    p {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ছাব্বির হেলথ কেয়ার</h1>
+    <p>ডিজিটাল চিকিৎসা সেবা | ডাক্তার দেখান ও পেমেন্ট করুন</p>
+  </header>
+
+  <main>
+    <section class="doctors">
+      <h2>ডাক্তার দেখান</h2>
+      <button id="showDoctorsBtn">ডাক্তারদের তালিকা দেখুন</button>
+      <div id="doctorList" style="display:none;">
+        <ul>
+          <li>ডা. মোহাম্মদ ছাব্বির</li>
+          <li>ডা. সোহেল রানা</li>
+          <li>ডা. রোজিনা ইসলাম</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="payment">
+      <h2>পেমেন্ট করুন</h2>
+      <form id="paymentForm">
+        <label for="method">পেমেন্ট পদ্ধতি নির্বাচন করুন:</label>
+        <select id="method" name="method" required>
+          <option value="">-- নির্বাচন করুন --</option>
+          <option value="bkash">Bkash</option>
+          <option value="nagad">Nagad</option>
+        </select>
+
+        <label for="number">আপনার নম্বর লিখুন:</label>
+        <input type="text" id="number" name="number" placeholder="০১XXXXXXXXX" required pattern="01[3-9][0-9]{8}" />
+
+        <label for="amount">টাকার পরিমাণ লিখুন:</label>
+        <input type="number" id="amount" name="amount" min="10" placeholder="উদাহরণ: ১০০" required />
+
+        <button type="submit">পেমেন্ট করুন</button>
+      </form>
+      <p id="paymentMsg"></p>
+    </section>
+
+    <section class="ai-assistant">
+      <h2>এআই সহায়ক</h2>
+      <button id="aiBtn">সাহায্য নিন</button>
+      <div id="aiForm" style="display:none;">
+        <label for="query">আপনার প্রশ্ন লিখুন:</label>
+        <textarea id="query" rows="3" placeholder="এখানে লিখুন..."></textarea>
+        <button id="aiSubmit">জমা দিন</button>
+      </div>
+      <p id="aiResponse"></p>
+    </section>
+
+    <section class="call-chat">
+      <h2>অডিও/ভিডিও কল ও চ্যাট</h2>
+      <p>সিস্টেম কাজ চলছে...</p>
+      <button disabled>কল শুরু করুন (পরবর্তী আপডেটে আসবে)</button>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('showDoctorsBtn').addEventListener('click', () => {
+      const list = document.getElementById('doctorList');
+      list.style.display = list.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.getElementById('paymentForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const method = document.getElementById('method').value;
+      const number = document.getElementById('number').value;
+      const amount = document.getElementById('amount').value;
+      const msg = document.getElementById('paymentMsg');
+
+      if (!method || !number || !amount) {
+        msg.style.color = 'red';
+        msg.textContent = 'অনুগ্রহ করে সব তথ্য সঠিকভাবে দিন।';
+        return;
+      }
+
+      msg.style.color = 'green';
+      msg.textContent = `${method} এ ${amount} টাকা পেমেন্ট করার জন্য ধন্যবাদ। আপনি নম্বর ${number} থেকে পেমেন্ট করেছেন। (এটি ডেমো বার্তা)`;
+      e.target.reset();
+    });
+
+    document.getElementById('aiBtn').addEventListener('click', () => {
+      const form = document.getElementById('aiForm');
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.getElementById('aiSubmit').addEventListener('click', () => {
+      const query = document.getElementById('query').value.trim();
+      const response = document.getElementById('aiResponse');
+      if (!query) {
+        response.style.color = 'red';
+        response.textContent = 'অনুগ্রহ করে প্রশ্ন লিখুন।';
+        return;
+      }
+      response.style.color = 'green';
+      response.textContent = 'আপনার প্রশ্ন পেয়েছি। শীঘ্রই উত্তর দেওয়া হবে। (ডেমো)';
+      document.getElementById('query').value = '';
+    });
+  </script>
+</body>
+</html>
