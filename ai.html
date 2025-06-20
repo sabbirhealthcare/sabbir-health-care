@@ -1,17 +1,21 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <title>AI চিকিৎসা সহকারী</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="chat.js" defer></script>
+    <meta charset="UTF-8">
+    <title>AI চিকিৎসা সেবা</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>AI সহকারীকে প্রশ্ন করুন</h2>
-  <input type="text" id="userInput" placeholder="আপনার প্রশ্ন লিখুন..." />
-  <button onclick="askAI()">জিজ্ঞাসা করুন</button>
-  <div id="chatBox"></div>
-  <br><br>
-  <button onclick="location.href='index.html'">🏠 হোমপেজে ফিরে যান</button>
+    <h2>AI ভিত্তিক জরুরি চিকিৎসা সেবা</h2>
+    <form>
+        <label>আপনার নাম: <input type="text" name="name"></label><br>
+        <label>সমস্যার বিবরণ: <textarea name="problem"></textarea></label><br>
+        <label>ছবি আপলোড: <input type="file" accept="image/*"></label><br>
+        <label>ভয়েস রেকর্ড: <input type="file" accept="audio/*"></label><br>
+        <label>বার্তা পাঠান: <input type="text" name="chat"></label><br>
+        <button type="submit">জমা দিন</button>
+    </form>
 </body>
 </html>
