@@ -28,11 +28,14 @@
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer sk-demo1234567890"  // ✅ এখানে এখন ডেমো API রাখা, আপনি চাইলে আপনারটা বসিয়ে দিতে পারবেন
+          "Authorization": "Bearer sk-real-gpt-api-key" // placeholder for secure real key
         },
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
-          messages: [{ role: "user", content: input }],
+          messages: [
+            { role: "system", content: "আপনি একজন অভিজ্ঞ ডাক্তার, বাংলায় উত্তর দিন।"},
+            { role: "user", content: input }
+          ],
         }),
       });
 
