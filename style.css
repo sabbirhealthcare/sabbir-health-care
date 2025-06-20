@@ -1,19 +1,34 @@
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: #f0f8ff;
-    padding: 20px;
+  font-family: 'Arial', sans-serif;
+  background: #f2f2f2;
+  padding: 20px;
 }
 h1, h2 {
-    color: #004d40;
+  color: #004d40;
 }
 button {
-    background-color: #009688;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 16px;
+  background-color: #26a69a;
+  color: white;
+  border: none;
+  border-radius: 5px;
 }
-a {
-    color: #00695c;
+.chatbox {
+  background: white;
+  padding: 10px;
+  height: 300px;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+.user {
+  color: #1a237e;
+  margin: 5px 0;
+}
+.ai {
+  color: #004d40;
+  margin: 5px 0;
 }
