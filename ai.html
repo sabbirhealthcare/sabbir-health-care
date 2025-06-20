@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>🤖 AI চিকিৎসা সহায়তা</h2>
+  <h2>🤖 AI চিকিৎসা সহায়তা (বাংলায় প্রশ্ন করুন)</h2>
   <div class="chatbox" id="chatbox"></div>
-  <input type="text" id="userInput" placeholder="আপনার সমস্যাটি লিখুন..." />
+  <input type="text" id="userInput" placeholder="আপনার সমস্যা লিখুন..." />
   <button onclick="sendMessage()">পাঠান</button>
 
   <script>
@@ -28,7 +28,7 @@
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer YOUR_API_KEY"
+          "Authorization": "Bearer sk-demo1234567890"  // ✅ এখানে এখন ডেমো API রাখা, আপনি চাইলে আপনারটা বসিয়ে দিতে পারবেন
         },
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
@@ -37,7 +37,7 @@
       });
 
       const data = await response.json();
-      const aiReply = data.choices[0].message.content;
+      const aiReply = data.choices && data.choices.length > 0 ? data.choices[0].message.content : "দুঃখিত, উত্তর পাওয়া যায়নি।";
       chatbox.innerHTML = chatbox.innerHTML.replace("🤖 চিন্তা করছে...", "🤖: " + aiReply);
     }
   </script>
