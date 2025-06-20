@@ -1,1 +1,33 @@
-body { font-family: Arial, sans-serif; background: #f4f4f4; color: #333; padding: 20px; }
+
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background-color: #007BFF;
+    color: white;
+    padding: 1rem;
+}
+main {
+    margin-top: 2rem;
+}
+textarea {
+    width: 80%;
+    height: 100px;
+    margin: 1rem 0;
+}
+button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+footer {
+    background: #222;
+    color: white;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

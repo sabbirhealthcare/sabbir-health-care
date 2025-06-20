@@ -1,11 +1,27 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="bn">
 <head>
-<title>ছাব্বির হেলথ কেয়ার</title>
-<link rel="stylesheet" href="style.css"></head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ছাব্বির হেলথ কেয়ার</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-<h1>Welcome to ছাব্বির হেলথ কেয়ার</h1>
-<p>আপনার AI চিকিৎসা সহায়ক</p>
-<script src="script.js"></script>
+    <header>
+        <h1>ছাব্বির হেলথ কেয়ার</h1>
+        <p>এখানে আপনি পাচ্ছেন AI চিকিৎসা সহায়তা, ভিডিও কল ও স্বাস্থ্য পরামর্শ</p>
+    </header>
+    <main>
+        <button onclick="handlePayment()">AI চিকিৎসা নিন (২০ টাকা)</button>
+        <div id="ai-chat" style="display:none;">
+            <textarea placeholder="রোগের বিবরণ লিখুন..."></textarea>
+            <button>সেন্ড</button>
+        </div>
+    </main>
+    <footer>
+        <p>যোগাযোগ: 01825798681 | পেমেন্ট: 01942326459 (bKash/Nagad)</p>
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
