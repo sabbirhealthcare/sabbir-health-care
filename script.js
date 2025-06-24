@@ -1,20 +1,16 @@
 
-async function handleInput() {
-  const input = document.getElementById('userInput').value;
-  const responseBox = document.getElementById('response');
-  if (!input.trim()) {
-    responseBox.innerHTML = "অনুগ্রহ করে আপনার সমস্যাটি লিখুন।";
-    return;
-  }
+async function getResponse() {
+    const input = document.getElementById("userInput").value.toLowerCase();
+    const responseBox = document.getElementById("responseBox");
+    const res = await fetch("diseases.json");
+    const data = await res.json();
 
-  // Simulate AI response
-  const simulatedResponse = {
-    fever: "আপনার জ্বর হতে পারে। পর্যাপ্ত পানি পান করুন এবং প্যারাসিটামল নিন।",
-    cough: "আপনার কাশি হচ্ছে মনে হচ্ছে। আদা-চা পান করুন এবং বিশ্রাম নিন।",
-    pain: "ব্যথার জন্য হালকা ব্যায়াম করুন এবং প্রয়োজনে পেইন কিলার সেবন করুন।",
-    default: "আমরা আপনার সমস্যা বুঝতে পারিনি। দয়া করে আরও বিস্তারিত লিখুন।"
-  };
-
-  let matched = Object.keys(simulatedResponse).find(key => input.toLowerCase().includes(key));
-  responseBox.innerHTML = simulatedResponse[matched] || simulatedResponse.default;
+    let found = data.find(d => input.includes(d.name.toLowerCase()));
+    if (found) {
+        responseBox.innerText = `সমস্যা: ${found.name}\n\nচিকিৎসা: ${found.treatment}`;
+    } else if (input.includes("তুমি কে") || input.includes("প্রতিষ্ঠাতা")) {
+        responseBox.innerText = "আমি ছাব্বির হেলথ কেয়ার-এর ডিজিটাল চিকিৎসা সহকারী। আমরা রোগ বিশ্লেষণ, চিকিৎসা, ও রিপোর্ট ব্যাখ্যা করি।";
+    } else {
+        responseBox.innerText = "আপনার সমস্যাটি ভালোভাবে লিখুন, আমি সাহায্য করার চেষ্টা করছি ইনশাআল্লাহ।";
+    }
 }
