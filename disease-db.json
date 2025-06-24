@@ -1,1 +1,11 @@
-{"fever": {"symptoms": ["high temperature"], "treatment": ["Paracetamol"]}}
+
+{
+  "fever": {
+    "symptoms": ["জ্বর", "ঠান্ডা লাগা"],
+    "treatment": "প্যারাসিটামল ও বিশ্রাম"
+  },
+  "cough": {
+    "symptoms": ["কাশি", "গলা ব্যথা"],
+    "treatment": "আদা চা ও হালকা ওষুধ"
+  }
+}
