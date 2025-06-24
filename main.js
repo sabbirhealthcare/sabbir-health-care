@@ -1,0 +1,1 @@
+// JavaScript logic for AI chat system
