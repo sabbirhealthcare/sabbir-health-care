@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -27,7 +26,6 @@
       font-size: 18px;
       overflow-y: auto;
       background: #dcedc8;
-      white-space: pre-line;
     }
     .input-section {
       display: flex;
@@ -61,7 +59,6 @@
       color: #388e3c;
     }
   </style>
-  <script src="disease_data.js"></script>
 </head>
 <body>
 
@@ -76,21 +73,18 @@
 
 <a class="back" href="index.html">← হোমপেজে ফিরে যান</a>
 
+<script src="disease_data.js"></script>
 <script>
 function processQuestion() {
   const q = document.getElementById("userQuestion").value.toLowerCase();
   const output = document.getElementById("aiOutput");
 
-  for (let item of data) {
-    for (let word of item.keywords) {
-      if (q.includes(word.toLowerCase())) {
-        output.innerText = "💡 চিকিৎসা পরামর্শ:\n\n" + item.answer;
-        return;
-      }
-    }
+  const found = data.find(item => item.keywords.some(k => q.includes(k)));
+  if (found) {
+    output.innerText = found.answer;
+  } else {
+    output.innerText = "দুঃখিত, এই প্রশ্নের উত্তর আমার ডেটাবেজে নেই। একজন ডাক্তারের সাথে পরামর্শ করুন।";
   }
-
-  output.innerText = "দুঃখিত, এই প্রশ্নের উত্তর আমার ডেটাবেজে নেই। একজন ডাক্তারের সাথে পরামর্শ করুন।";
 }
 </script>
 
