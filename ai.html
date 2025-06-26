@@ -5,41 +5,91 @@
   <title>AI চিকিৎসা সহায়তা</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: 'Siyam Rupali', sans-serif; background: #e8f5e9; padding: 20px; margin: 0; }
-    h1 { text-align: center; color: #388e3c; }
-    input[type="text"] {
-      width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px;
+    body {
+      font-family: 'Siyam Rupali', sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: #f1f8e9;
     }
-    #aiOutput { background: #f1f8e9; padding: 10px; margin-top: 10px; border-radius: 5px; min-height: 100px; }
-    .back { display: block; margin-top: 20px; text-align: center; color: #388e3c; text-decoration: none; }
+    h1 {
+      background: #388e3c;
+      color: white;
+      padding: 15px;
+      margin: 0;
+      text-align: center;
+    }
+    #aiOutput {
+      flex: 1;
+      padding: 20px;
+      font-size: 18px;
+      overflow-y: auto;
+      background: #dcedc8;
+    }
+    .input-section {
+      display: flex;
+      padding: 10px;
+      background: #f9fbe7;
+      border-top: 1px solid #ccc;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #388e3c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .back {
+      display: block;
+      text-align: center;
+      padding: 10px;
+      background: #eee;
+      text-decoration: none;
+      color: #388e3c;
+    }
   </style>
 </head>
 <body>
 
-<h1>AI চিকিৎসা সহায়তা</h1>
+<h1>🤖 AI চিকিৎসা সহায়তা</h1>
 
-<input type="text" id="userQuestion" placeholder="যেমন: জ্বর হলে কী করবো?">
-<div id="aiOutput">এখানে আপনার উত্তরের ফলাফল দেখানো হবে...</div>
+<div id="aiOutput">এখানে প্রশ্নের উত্তর দেখানো হবে...</div>
 
-<a href="index.html" class="back">← হোমপেজে ফিরে যান</a>
+<div class="input-section">
+  <input type="text" id="userQuestion" placeholder="আপনার প্রশ্ন লিখুন...">
+  <button onclick="processQuestion()">প্রেরণ করুন</button>
+</div>
+
+<a class="back" href="index.html">← হোমপেজে ফিরে যান</a>
 
 <script>
-document.getElementById("userQuestion").addEventListener("input", function () {
-  const q = this.value.toLowerCase();
+function processQuestion() {
+  const q = document.getElementById("userQuestion").value.toLowerCase();
   const output = document.getElementById("aiOutput");
 
   if (q.includes("জ্বর")) {
-    output.innerText = "জ্বর হলে প্যারাসিটামল ৫০০মি.গ্রা. প্রতি ৬ ঘণ্টা পরপর খান, পানি পান করুন।";
-  } else if (q.includes("ডায়রিয়া")) {
-    output.innerText = "ওরস্যালাইন খান, পাতলা খাবার এড়িয়ে চলুন, বিশ্রাম নিন।";
-  } else if (q.includes("কাশি")) {
-    output.innerText = "গরম পানি পান করুন, ভাপ নিন, প্রয়োজনে এন্টি-হিস্টামিন নিতে পারেন।";
+    output.innerText = "জ্বর হলে প্যারাসিটামল ৫০০ মি.গ্রা. প্রতি ৬ ঘণ্টা পরপর খান, বিশ্রাম নিন ও পানি পান করুন।";
+  } else if (q.includes("ডায়রিয়া") || q.includes("ডায়রিয়া")) {
+    output.innerText = "ডায়রিয়া হলে ওরস্যালাইন খান, প্রচুর পানি পান করুন এবং বিশ্রাম নিন।";
+  } else if (q.includes("কাশি") || q.includes("সর্দি")) {
+    output.innerText = "কাশি বা সর্দি হলে গরম পানির ভাপ নিন, আদা লেবুর চা উপকারী।";
   } else if (q.length > 2) {
-    output.innerText = "দুঃখিত, এই প্রশ্নের উত্তর আমার কাছে নেই। আপনি ডাক্তারকে কল করুন।";
+    output.innerText = "দুঃখিত, এই প্রশ্নের উত্তর আমার ডেটাবেজে নেই। একজন ডাক্তারের সাথে পরামর্শ করুন।";
   } else {
-    output.innerText = "এখানে আপনার উত্তরের ফলাফল দেখানো হবে...";
+    output.innerText = "আপনার প্রশ্ন লিখে 'প্রেরণ করুন' বাটনে ক্লিক করুন।";
   }
-});
+}
 </script>
 
 </body>
