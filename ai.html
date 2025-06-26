@@ -83,9 +83,10 @@ function processQuestion() {
   const q = document.getElementById("userQuestion").value.toLowerCase();
   const output = document.getElementById("aiOutput");
 
-  for (let item of diseaseData) {
-    for (let keyword of item.keywords) {
-      if (q.includes(keyword)) {
+  for (let i = 0; i < diseaseData.length; i++) {
+    const item = diseaseData[i];
+    for (let j = 0; j < item.keywords.length; j++) {
+      if (q.includes(item.keywords[j].toLowerCase())) {
         output.innerText = `🤒 রোগ: ${item.name}\n\n💊 চিকিৎসা: ${item.treatment}`;
         return;
       }
