@@ -1,1 +1,6 @@
-This is a partially completed version of the Sabbir Healthcare AI system. More features are being developed.
+এই ফাইলটি ছাব্বির হেলথ কেয়ার ওয়েবসাইটের সকল কনটেন্ট নিয়ে তৈরি করা হয়েছে।
+
+লাইভ লিংক: (আপডেট হবে চূড়ান্ত ওয়েবসাইট হোস্টিং শেষে)
+যোগাযোগ: samsul111x@gmail.com
+পেমেন্ট নাম্বার: 01942326459
+AI বট ফি: ২০ টাকা
