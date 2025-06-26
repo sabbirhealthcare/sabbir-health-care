@@ -1,43 +1,46 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
   <title>AI চিকিৎসা সহায়তা</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: 'Siyam Rupali', sans-serif; background: #e8f5e9; padding: 20px; margin: 0; }
+    h1 { text-align: center; color: #388e3c; }
+    input[type="text"] {
+      width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px;
+    }
+    #aiOutput { background: #f1f8e9; padding: 10px; margin-top: 10px; border-radius: 5px; min-height: 100px; }
+    .back { display: block; margin-top: 20px; text-align: center; color: #388e3c; text-decoration: none; }
+  </style>
 </head>
 <body>
-  <h2>🤖 AI চিকিৎসা সহায়তা (আপনার সমস্যাটি বাংলায় লিখুন)</h2>
-  <div class="chatbox" id="chatbox"></div>
-  <input type="text" id="userInput" placeholder="উদাহরণঃ আমার মাথা ব্যথা করছে..." />
-  <button onclick="sendMessage()">পাঠান</button>
 
-  <script>
-    async function sendMessage() {
-      const input = document.getElementById("userInput").value;
-      const chatbox = document.getElementById("chatbox");
-      if (!input) return;
+<h1>AI চিকিৎসা সহায়তা</h1>
 
-      chatbox.innerHTML += "<div class='user'>🙍‍♂️: " + input + "</div>";
-      document.getElementById("userInput").value = "";
+<input type="text" id="userQuestion" placeholder="যেমন: জ্বর হলে কী করবো?">
+<div id="aiOutput">এখানে আপনার উত্তরের ফলাফল দেখানো হবে...</div>
 
-      chatbox.innerHTML += "<div class='ai'>🤖 চিন্তা করছে...</div>";
+<a href="index.html" class="back">← হোমপেজে ফিরে যান</a>
 
-      const response = await fetch("https://sabbir-ai-helper.proxy/api/gpt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          prompt: input
-        }),
-      });
+<script>
+document.getElementById("userQuestion").addEventListener("input", function () {
+  const q = this.value.toLowerCase();
+  const output = document.getElementById("aiOutput");
 
-      const data = await response.json();
-      const aiReply = data.reply || "দুঃখিত, আমি বুঝতে পারিনি। আবার চেষ্টা করুন।";
-      chatbox.innerHTML = chatbox.innerHTML.replace("🤖 চিন্তা করছে...", "🤖: " + aiReply);
-    }
-  </script>
+  if (q.includes("জ্বর")) {
+    output.innerText = "জ্বর হলে প্যারাসিটামল ৫০০মি.গ্রা. প্রতি ৬ ঘণ্টা পরপর খান, পানি পান করুন।";
+  } else if (q.includes("ডায়রিয়া")) {
+    output.innerText = "ওরস্যালাইন খান, পাতলা খাবার এড়িয়ে চলুন, বিশ্রাম নিন।";
+  } else if (q.includes("কাশি")) {
+    output.innerText = "গরম পানি পান করুন, ভাপ নিন, প্রয়োজনে এন্টি-হিস্টামিন নিতে পারেন।";
+  } else if (q.length > 2) {
+    output.innerText = "দুঃখিত, এই প্রশ্নের উত্তর আমার কাছে নেই। আপনি ডাক্তারকে কল করুন।";
+  } else {
+    output.innerText = "এখানে আপনার উত্তরের ফলাফল দেখানো হবে...";
+  }
+});
+</script>
+
 </body>
 </html>

@@ -10,14 +10,8 @@
     .btn {
       width: 100%; padding: 15px; margin: 10px 0;
       font-size: 18px; background: #00796b; color: white;
-      border: none; border-radius: 8px; cursor: pointer;
+      border: none; border-radius: 8px; cursor: pointer; text-decoration: none; display: block; text-align: center;
     }
-    .section { background: #fff; padding: 15px; margin-top: 10px; border-radius: 10px; box-shadow: 0 0 8px #ccc; display: none; }
-    #aiOutput { background: #f1f8e9; padding: 10px; margin-top: 10px; border-radius: 5px; min-height: 100px; }
-    input[type="text"] {
-      width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px;
-    }
-    .tip { background: #f9fbe7; padding: 10px; border-left: 4px solid #cddc39; margin-bottom: 10px; border-radius: 5px; }
     footer { text-align: center; margin-top: 30px; color: gray; font-size: 14px; }
   </style>
 </head>
@@ -25,52 +19,12 @@
 
 <h1>ছাব্বির হেলথ কেয়ার</h1>
 
-<button class="btn" onclick="toggleSection('aiSection')">🤖 AI চিকিৎসা সহায়তা</button>
-<button class="btn" onclick="toggleSection('healthTips')">📚 স্বাস্থ্য টিপস পড়ুন</button>
-
-<!-- AI Section -->
-<div class="section" id="aiSection">
-  <h2>আপনার প্রশ্ন লিখুন</h2>
-  <input type="text" id="userQuestion" placeholder="যেমন: জ্বর হলে কী করবো?">
-  <div id="aiOutput">এখানে আপনার উত্তরের ফলাফল দেখানো হবে...</div>
-</div>
-
-<!-- Health Tips Section -->
-<div class="section" id="healthTips">
-  <h2>স্বাস্থ্য টিপস</h2>
-  <div class="tip"><strong>জ্বর:</strong> প্যারাসিটামল ৫০০ মি.গ্রা. ৬ ঘণ্টা পরপর, হালকা খাবার, বিশ্রাম।</div>
-  <div class="tip"><strong>ডায়রিয়া:</strong> ওরস্যালাইন খেতে হবে, প্রচুর পানি পান করুন।</div>
-  <div class="tip"><strong>সর্দি কাশি:</strong> গরম পানির ভাপ, আদা-লেবুর চা উপকারী।</div>
-</div>
+<a href="ai.html" class="btn">🤖 AI চিকিৎসা সহায়তা</a>
+<a href="tips.html" class="btn">📚 স্বাস্থ্য টিপস পড়ুন</a>
 
 <footer>
   &copy; ২০২৫ ছাব্বির হেলথ কেয়ার
 </footer>
-
-<script>
-function toggleSection(id) {
-  const section = document.getElementById(id);
-  section.style.display = (section.style.display === "block") ? "none" : "block";
-}
-
-// ডেমো AI সিস্টেম — প্রশ্ন লিখলে নিচে উত্তর দেখাবে
-document.getElementById("userQuestion").addEventListener("input", function () {
-  const q = this.value.toLowerCase();
-  const output = document.getElementById("aiOutput");
-
-  if (q.includes("জ্বর")) {
-    output.innerText = "জ্বর হলে প্যারাসিটামল ৫০০মি.গ্রা. প্রতি ৬ ঘণ্টা পরপর খান, পানি পান করুন।";
-  } else if (q.includes("ডায়রিয়া")) {
-    output.innerText = "ওরস্যালাইন খান, পাতলা খাবার এড়িয়ে চলুন, বিশ্রাম নিন।";
-  } else if (q.includes("কাশি")) {
-    output.innerText = "গরম পানি পান করুন, ভাপ নিন, প্রয়োজনে এন্টি-হিস্টামিন নিতে পারেন।";
-  } else if (q.length > 2) {
-    output.innerText = "দুঃখিত, এই প্রশ্নের উত্তর আমার কাছে নেই। আপনি ডাক্তারকে কল করুন।";
-  } else {
-    output.innerText = "এখানে আপনার উত্তরের ফলাফল দেখানো হবে...";
-  }
-});
-</script>
 
 </body>
 </html>
