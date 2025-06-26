@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -11,52 +12,116 @@
     .input-section { display: flex; padding: 10px; background: #f9fbe7; border-top: 1px solid #ccc; }
     input[type="text"] { flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; margin-right: 10px; }
     button { padding: 10px 20px; font-size: 16px; background: #388e3c; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .follow-up button { margin: 5px; }
     .back { display: block; text-align: center; padding: 10px; background: #eee; text-decoration: none; color: #388e3c; }
   </style>
 </head>
 <body>
+
 <h1>🤖 AI চিকিৎসা সহায়তা</h1>
-<div id="aiOutput">এখানে প্রশ্নের উত্তর দেখানো হবে...</div>
+<div id="aiOutput">আপনার সমস্যাটি লিখুন...</div>
+
 <div class="input-section">
-  <input type="text" id="userQuestion" placeholder="আপনার প্রশ্ন লিখুন...">
+  <input type="text" id="userQuestion" placeholder="আপনার সমস্যা লিখুন..." onkeydown="if(event.key==='Enter'){processQuestion();}">
   <button onclick="processQuestion()">প্রেরণ করুন</button>
 </div>
+
 <a class="back" href="index.html">← হোমপেজে ফিরে যান</a>
-<script src="disease_data.js"></script>
+
 <script>
 function processQuestion() {
-  const q = document.getElementById("userQuestion").value.toLowerCase().trim();
+  const input = document.getElementById("userQuestion").value.toLowerCase();
   const output = document.getElementById("aiOutput");
 
-  if (!q) {
-    output.innerText = "অনুগ্রহ করে একটি প্রশ্ন লিখুন।";
-    return;
-  }
-
-  let found = null;
-
-  for (const item of data) {
-    for (const keyword of item.keywords) {
-      if (q.includes(keyword)) {
-        found = item;
-        break;
-      }
-    }
-    if (found) break;
-  }
-
-  if (found) {
-    let response = `<strong>চিকিৎসা:</strong> ${found.answer}`;
-    if (found.severity === "critical") {
-      response += "<br><br><strong>⚠️ জরুরি:</strong> দ্রুত হাসপাতালে যান বা অভিজ্ঞ ডাক্তারের পরামর্শ নিন।";
-    } else if (found.severity === "test") {
-      response += "<br><br><strong>🔬 পরামর্শ:</strong> পরীক্ষা (যেমন: রক্ত, ECG, ইত্যাদি) করতে হতে পারে।";
-    }
-    output.innerHTML = response;
+  if (input.includes("মাথা ব্যথা")) {
+    output.innerHTML = "🤖 মাথার কোন পাশে ব্যথা?<br><div class='follow-up'><button onclick='headPain("সামনে")'>সামনে</button><button onclick='headPain("পেছনে")'>পেছনে</button><button onclick='headPain("ডানে")'>ডানে</button><button onclick='headPain("বামে")'>বামে</button></div>";
+  } else if (input.includes("পেট ব্যথা")) {
+    output.innerHTML = "🤖 পেটের কোন পাশে ব্যথা?<br><div class='follow-up'><button onclick='bellyPain("ডানে")'>ডান পাশে</button><button onclick='bellyPain("বামে")'>বাম পাশে</button><button onclick='bellyPain("মাঝে")'>মাঝে</button></div>";
+  } else if (input.includes("বমি")) {
+    output.innerHTML = "🤖 বমির সাথে জ্বর আছে?<br><div class='follow-up'><button onclick='vomit("হ্যাঁ")'>হ্যাঁ</button><button onclick='vomit("না")'>না</button></div>";
+  } else if (input.includes("চোখ")) {
+    output.innerHTML = "🤖 চোখের সমস্যা কি ধরনের?<br><div class='follow-up'><button onclick='eye("লাল")'>লাল</button><button onclick='eye("চুলকায়")'>চুলকায়</button></div>";
+  } else if (input.includes("বুক ব্যথা")) {
+    output.innerHTML = "🤖 বুকের কোন পাশে ব্যথা?<br><div class='follow-up'><button onclick='chest("বামে")'>বাম পাশে</button><button onclick='chest("ডানে")'>ডান পাশে</button></div>";
+  } else if (input.includes("পায়খানা")) {
+    output.innerHTML = "🤖 পায়খানায় রক্ত আছে?<br><div class='follow-up'><button onclick='stool("হ্যাঁ")'>হ্যাঁ</button><button onclick='stool("না")'>না</button></div>";
+  } else if (input.includes("ঘাড়")) {
+    output.innerHTML = "🤖 ঘাড় কি শক্ত হয়ে গেছে?<br><div class='follow-up'><button onclick='neck("হ্যাঁ")'>হ্যাঁ</button><button onclick='neck("না")'>না</button></div>";
+  } else if (input.includes("পিরিয়ড")) {
+    output.innerHTML = "🤖 পিরিয়ড নিয়মিত হচ্ছে?<br><div class='follow-up'><button onclick='period("হ্যাঁ")'>হ্যাঁ</button><button onclick='period("না")'>না</button></div>";
+  } else if (input.includes("শিশু") && input.includes("জ্বর")) {
+    output.innerHTML = "🤖 শিশুর তাপমাত্রা কত?<br><div class='follow-up'><button onclick='babyFever("১০০°")'>১০০°</button><button onclick='babyFever("১০৩°+")'>১০৩°+</button></div>";
+  } else if (input.includes("হাত") || input.includes("পা")) {
+    output.innerHTML = "🤖 ব্যথা করা অঙ্গ বাঁকা হয়ে গেছে?<br><div class='follow-up'><button onclick='limb("হ্যাঁ")'>হ্যাঁ</button><button onclick='limb("না")'>না</button></div>";
   } else {
-    output.innerText = "দুঃখিত, আপনার প্রশ্ন বুঝতে পারিনি। অনুগ্রহ করে বিস্তারিত লিখুন অথবা একজন ডাক্তারের পরামর্শ নিন।";
+    output.innerText = "এই সমস্যার জন্য এখনো সিস্টেম আপডেট হয়নি। অনুগ্রহ করে অন্য কিছু চেষ্টা করুন।";
   }
 }
+
+// Follow-up responses
+function headPain(loc) {
+  const output = document.getElementById("aiOutput");
+  if (loc === "সামনে") output.innerText = "সাইনাস: Tab-Sinus, গরম পানির ভাপ নিন।";
+  else if (loc === "পেছনে") output.innerText = "মাইগ্রেন: Tab-Migranil, অন্ধকার ঘরে বিশ্রাম নিন।";
+  else if (loc === "ডানে") output.innerText = "ক্লাস্টার হেডেক: Tab-Clustex, ঠান্ডা সেঁক দিন।";
+  else if (loc === "বামে") output.innerText = "প্রেসার: Tab-PressureX, বিশ্রাম নিন।";
+}
+
+function bellyPain(loc) {
+  const output = document.getElementById("aiOutput");
+  if (loc === "ডানে") output.innerText = "এপেন্ডিসাইটিস সন্দেহ, হাসপাতালে যান।";
+  else if (loc === "বামে") output.innerText = "গ্যাস/অম্বল: Tab-Antacid, হালকা খাবার খান।";
+  else output.innerText = "ডায়রিয়া হতে পারে: ওরস্যালাইন ও বিশ্রাম নিন।";
+}
+
+function vomit(ans) {
+  const output = document.getElementById("aiOutput");
+  if (ans === "হ্যাঁ") output.innerText = "জ্বরসহ বমি → ভাইরাল ইনফেকশন হতে পারে। Tab-Paracetamol + ওরস্যালাইন।";
+  else output.innerText = "গ্যাস্ট্রিক সমস্যা হতে পারে। Tab-Ranitidine ও হালকা খাবার খান।";
+}
+
+function eye(type) {
+  const output = document.getElementById("aiOutput");
+  if (type === "লাল") output.innerText = "চোখে সংক্রমণ: গরম পানিতে চোখ ধুয়ে Neomycin ড্রপ দিন।";
+  else output.innerText = "এলার্জি: Tab-Antihistamin, চোখে পানি দিন।";
+}
+
+function chest(side) {
+  const output = document.getElementById("aiOutput");
+  if (side === "বামে") output.innerText = "হার্ট সমস্যা হতে পারে। ECG ও রক্ত পরীক্ষা করুন। হাসপাতালে যান।";
+  else output.innerText = "গ্যাস/কোষ্ঠকাঠিন্য: Tab-Gelusil, পানি খান।";
+}
+
+function stool(blood) {
+  const output = document.getElementById("aiOutput");
+  if (blood === "হ্যাঁ") output.innerText = "আন্ত্রিক সংক্রমণ → Tab-Metronidazole, ডায়রিয়া পরীক্ষা করুন।";
+  else output.innerText = "স্বাভাবিক ডায়রিয়া: ওরস্যালাইন ও বিশ্রাম নিন।";
+}
+
+function neck(rigid) {
+  const output = document.getElementById("aiOutput");
+  if (rigid === "হ্যাঁ") output.innerText = "মেনিনজাইটিস সম্ভাবনা → হাসপাতালে যান ও সিটি স্ক্যান করুন।";
+  else output.innerText = "ঘাড়ের টান: হালকা মালিশ ও বিশ্রাম নিন।";
+}
+
+function period(ans) {
+  const output = document.getElementById("aiOutput");
+  if (ans === "না") output.innerText = "হারমোন সমস্যা হতে পারে। Tab-Hormonal + আল্ট্রাসনো করুন।";
+  else output.innerText = "স্বাভাবিক — বিশ্রাম ও পুষ্টিকর খাবার খান।";
+}
+
+function babyFever(temp) {
+  const output = document.getElementById("aiOutput");
+  if (temp === "১০৩°+") output.innerText = "শিশুদের জ্বর বেশি হলে দ্রুত Paracetamol Syrup ও ঠান্ডা পানির সেঁক দিন। হাসপাতালে যান।";
+  else output.innerText = "সাধারণ জ্বর: Paracetamol Syrup ও বিশ্রাম দিন।";
+}
+
+function limb(bend) {
+  const output = document.getElementById("aiOutput");
+  if (bend === "হ্যাঁ") output.innerText = "ভাঙা/মচকানো সন্দেহ: এক্স-রে করুন, হাসপাতালে যান।";
+  else output.innerText = "মাংসপেশির ব্যথা: হালকা মালিশ ও Tab-PainRelief।";
+}
 </script>
+
 </body>
 </html>
