@@ -1,11 +1,39 @@
 
 <!DOCTYPE html>
 <html lang="bn">
-<head><meta charset="UTF-8"><title>পেমেন্ট</title><link rel="stylesheet" href="style.css"></head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>পেমেন্ট করুন</title>
+  <style>
+    body { font-family: sans-serif; background: #fff3e0; padding: 20px; }
+    h2 { color: #d84315; }
+    .card { background: white; padding: 20px; border-radius: 10px; }
+    .input { width: 100%; padding: 10px; margin: 10px 0; font-size: 16px; }
+    .button { background: #ef6c00; color: white; padding: 10px 20px; font-size: 18px; border: none; border-radius: 6px; cursor: pointer; }
+  </style>
+</head>
 <body>
-<h2>💳 পেমেন্ট নির্দেশনা</h2>
-<p>বিকাশ / নগদ নাম্বার: <strong>01942326459</strong></p>
-<p>পেমেন্ট করে আপনার নাম ও সমস্যার বিবরণ পাঠান ইমেইলে বা ফর্মে</p>
-<a href="index.html">🔙 হোমপেজে ফিরুন</a>
+  <div class="card">
+    <h2>AI সেবা নিতে ৩০ টাকা পাঠান</h2>
+    <p>📱 bKash/Nagad: <strong id="number">01942326459</strong> <button onclick="copyNumber()">কপি করুন</button></p>
+    <input class="input" type="text" placeholder="আপনার টানজেকশন আইডি লিখুন" id="txid" />
+    <button class="button" onclick="submitPayment()">সাবমিট</button>
+  </div>
+
+  <script>
+    function copyNumber() {
+      navigator.clipboard.writeText(document.getElementById("number").innerText);
+      alert("নাম্বার কপি হয়েছে");
+    }
+    function submitPayment() {
+      const tx = document.getElementById("txid").value.trim();
+      if (tx.length > 5) {
+        window.location.href = "chat.html";
+      } else {
+        alert("দয়া করে সঠিক টানজেকশন আইডি লিখুন");
+      }
+    }
+  </script>
 </body>
 </html>

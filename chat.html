@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI চ্যাট</title>
+  <style>
+    body { font-family: sans-serif; background: #e3f2fd; margin: 0; }
+    .chat-container { padding: 20px; height: 90vh; overflow-y: auto; }
+    .input-bar { position: fixed; bottom: 0; width: 100%; display: flex; background: white; padding: 10px; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); }
+    input { flex: 1; padding: 10px; font-size: 16px; }
+    button { background: #1976d2; color: white; border: none; padding: 10px 15px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-left: 10px; }
+    .response { padding: 10px; background: #bbdefb; border-radius: 6px; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <div class="chat-container" id="chat">
+    <p class="response">এখানে আপনার উত্তর দেখানো হবে</p>
+  </div>
+  <div class="input-bar">
+    <input type="text" placeholder="এখানে প্রশ্ন লিখুন, সর্বোচ্চ দুইটা..." />
+    <button onclick="sendMessage()">সেন্ড</button>
+  </div>
+
+  <script>
+    function sendMessage() {
+      const input = document.querySelector("input");
+      const chat = document.getElementById("chat");
+      if (input.value.trim()) {
+        const newMsg = document.createElement("p");
+        newMsg.className = "response";
+        newMsg.innerText = "উত্তর: " + input.value;
+        chat.appendChild(newMsg);
+        input.value = "";
+        chat.scrollTop = chat.scrollHeight;
+      }
+    }
+  </script>
+</body>
+</html>
