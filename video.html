@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ভিডিও চ্যাট</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"></script>
+</head>
+<body>
+  <h2>🎥 ভিডিও/অডিও কল রুম</h2>
+  <input id="room" placeholder="রুম নাম দিন" />
+  <button onclick="joinRoom()">যোগ দিন</button>
+  <br/><video id="myVideo" autoplay muted></video>
+  <video id="userVideo" autoplay></video>
+  <div id="chat"></div>
+  <textarea id="msg"></textarea>
+  <button onclick="sendMessage()">পাঠান</button>
+  <script src="video.js"></script>
+</body>
+</html>
