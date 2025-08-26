@@ -1,0 +1,292 @@
+<!doctype html>
+
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ছাব্বির কুইজ — Full SaaS Demo</title>
+  <style>
+    :root{--bg:#071022;--card:#0b1220;--accent:#06b6d4;--muted:#94a3b8}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, sans-serif;background:linear-gradient(180deg,#071022 0%, #071633 100%);color:#e6eef6}
+    .wrap{max-width:980px;margin:20px auto;padding:18px}
+    h1{margin:0;font-size:20px}
+    .card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6);margin-top:12px}
+    label{display:block;margin:8px 0 4px;color:var(--muted);font-size:13px}
+    input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    button{background:var(--accent);color:#042028;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
+    .muted{color:var(--muted);font-size:13px}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+    .option{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);margin-bottom:8px;cursor:pointer}
+    .hidden{display:none}
+    .small{font-size:13px}
+    .flex-between{display:flex;justify-content:space-between;align-items:center}
+    .list{max-height:240px;overflow:auto}
+    .pill{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:8px;font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="flex-between">
+      <h1>ছাব্বির কুইজ • Full SaaS Demo</h1>
+      <div class="pill">Ready to host • Edit CONFIG inside file</div>
+    </header><div id="main">
+  <!-- Auth -->
+  <div id="auth" class="card">
+    <div class="row">
+      <div class="col">
+        <label>নাম</label>
+        <input id="name" placeholder="নাম লিখো" />
+        <label>মোবাইল</label>
+        <input id="phone" placeholder="01XXXXXXXXX" />
+        <div style="height:10px"></div>
+        <button id="btn-join">Join / Start</button>
+        <div class="muted small" style="margin-top:8px">Premium access পেতে পেমেন্ট করে TXN দিন — Admin যাচাই করে আাক্সেস দেবেন।</div>
+      </div>
+
+      <div style="width:320px">
+        <div class="card" style="background:rgba(255,255,255,0.02);">
+          <div class="muted small">Premium Pack</div>
+          <h2 style="margin:6px 0">৳ <span id="price"></span></h2>
+          <div class="muted small">Payment Methods listed below — Submit TXN to unlock premium.</div>
+          <div style="height:10px"></div>
+          <div class="muted small">Payment Numbers</div>
+          <div class="muted small">bKash: <strong id="bkash"></strong></div>
+          <div class="muted small">Nagad: <strong id="nagad"></strong></div>
+          <div style="height:10px"></div>
+          <div class="center"><button id="btn-pay">Payment Instructions</button></div>
+        </div>
+
+        <div class="card" style="margin-top:10px">
+          <div class="muted small">Admin</div>
+          <input id="admin-pass" type="password" placeholder="Admin password" />
+          <div style="height:8px"></div>
+          <div class="row"><button id="btn-admin">Admin Login</button><button id="btn-reset" style="background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.04)">Reset Demo</button></div>
+          <div class="muted small" style="margin-top:8px">Admin can verify payments & pick contest winners.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz area -->
+  <div id="quiz-area" class="card hidden">
+    <div class="flex-between">
+      <div>
+        <div id="player-info" class="muted small"></div>
+        <h2 id="quiz-title">General Knowledge Quiz</h2>
+      </div>
+      <div>
+        <div class="muted small">Score: <span id="score">0</span></div>
+      </div>
+    </div>
+    <hr style="opacity:0.06;margin:12px 0" />
+    <div id="q-box">
+      <div id="q-text" class="small" style="font-size:17px;margin-bottom:10px"></div>
+      <div id="opts"></div>
+    </div>
+    <div style="height:10px"></div>
+    <div class="row">
+      <div class="col"><button id="btn-next" disabled>Next</button></div>
+      <div class="col"><button id="btn-finish" style="background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.04)">Finish & Save</button></div>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div id="pay-modal" class="card hidden">
+    <h3>পেমেন্ট নির্দেশ</h3>
+    <div class="muted small">বিকাশ: <strong id="bkash2"></strong></div>
+    <div class="muted small">নগদ: <strong id="nagad2"></strong></div>
+    <div class="muted small">Amount: ৳ <span id="price2"></span></div>
+    <div style="height:8px"></div>
+    <label>TXN / ট্রান্স আইডি</label>
+    <input id="txn" placeholder="TXN ID লিখো" />
+    <div style="height:8px"></div>
+    <div class="row"><button id="submit-txn">Submit TXN</button><button id="close-pay" style="background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.04)">Close</button></div>
+    <div class="muted small" style="margin-top:8px">TXN সাবমিট হলে Admin pending list এ দেখবে এবং Verify করে Unlock করবে।</div>
+  </div>
+
+  <!-- Admin panel -->
+  <div id="admin-panel" class="card hidden">
+    <h3>Admin Panel</h3>
+    <div class="row">
+      <div class="col">
+        <div class="muted small">Pending Payments</div>
+        <div id="pending" class="list"></div>
+      </div>
+      <div class="col">
+        <div class="muted small">Paid Users</div>
+        <div id="paid-users" class="list"></div>
+      </div>
+    </div>
+    <div style="height:10px"></div>
+    <div class="card">
+      <div class="muted small">Contest / Winner Selection</div>
+      <label>How many winners to pick</label>
+      <input id="num-winners" type="number" value="5" />
+      <label>Minimum paid participants required</label>
+      <input id="min-participants" type="number" value="10" />
+      <div style="height:8px"></div>
+      <div class="row"><button id="pick-winners">Pick Winners</button><button id="show-winners" style="background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.04)">Show Winners</button></div>
+      <div style="height:8px"></div>
+      <div id="winners" class="list"></div>
+    </div>
+  </div>
+
+  <footer class="muted small" style="margin-top:12px">Note: This demo uses browser storage (localStorage). For real product use Firebase/Server DB for reliability and multi-device support. Also run legal check before running any prize-based campaign.</footer>
+</div>
+
+  </div><script>
+/* ================== CONFIG ==================
+   Edit these before hosting
+==============================================*/
+const CONFIG = {
+  adminPassword: 'sabbiradmin',
+  bkashNumber: '01942326459',
+  nagadNumber: '01700000000',
+  premiumAmount: 20,
+  contest: { defaultWinners:5 }
+};
+/* ============================================*/
+
+// Small question bank (extend as needed)
+const QUESTION_BANK = [
+  {id:1,q:'বাংলার রাজধানী কোনটি?',options:['খুলনা','ঢাকা','চট্টগ্রাম','রংপুর'],a:1},
+  {id:2,q:'বাংলাদেশের জাতীয় ফুল?',options:['রজনীগন্ধা','শাপলা','গোলাপ','ক্যামেরিয়া'],a:1},
+  {id:3,q:'সূর্য কোথায় ওঠে?',options:['পশ্চিম','উত্তর','পূর্ব','দক্ষিণ'],a:2},
+  {id:4,q:'পৃথিবীর সবচেয়ে বড় মহাদেশ?',options:['আফ্রিকা','আশিয়া','ইউরোপ','অস্ট্রেলিয়া'],a:1},
+  {id:5,q:'চাঁদের গ্রহ কোনটি?',options:['পৃথিবী','মঙ্গল','শুক্র','চাঁদ নয়'],a:3},
+  {id:6,q:'বাংলাদেশ স্বাধীনতা কবে পেয়েছিল?',options:['১৯৭১','১৯৭২','১৯৭০','১৯৬৫'],a:0}
+];
+
+/* ========== Utilities for localStorage (demo-only) ========== */
+const LS = {
+  get(k){try{return JSON.parse(localStorage.getItem('saas_'+k));}catch(e){return null}},
+  set(k,v){localStorage.setItem('saas_'+k, JSON.stringify(v));},
+  clear(){localStorage.clear();}
+};
+
+// Data structures
+// pending: [{name,phone,txn,amount,when}]
+// users: { phone: {name,paid:true/false,seen:[ids],score:0} }
+// scores: [{name,phone,score,when}]
+
+// Elements
+const $ = id=>document.getElementById(id);
+
+function init(){
+  // set UI numbers
+  $('bkash').textContent = CONFIG.bkashNumber; $('bkash2').textContent=CONFIG.bkashNumber;
+  $('nagad').textContent = CONFIG.nagadNumber; $('nagad2').textContent=CONFIG.nagadNumber;
+  $('price').textContent = CONFIG.premiumAmount; $('price2').textContent = CONFIG.premiumAmount;
+
+  bind();
+  renderAdminLists();
+}
+
+function bind(){
+  $('btn-join').addEventListener('click', joinUser);
+  $('btn-pay').addEventListener('click', ()=>show('pay-modal'));
+  $('close-pay').addEventListener('click', ()=>hide('pay-modal'));
+  $('submit-txn').addEventListener('click', submitTxn);
+  $('btn-admin').addEventListener('click', adminLogin);
+  $('btn-reset').addEventListener('click', resetDemo);
+  $('btn-next').addEventListener('click', onNext);
+  $('btn-finish').addEventListener('click', finishQuiz);
+  $('pick-winners').addEventListener('click', pickWinners);
+  $('show-winners').addEventListener('click', renderWinners);
+}
+
+// Auth / Join
+let session = {name:'',phone:'',score:0,currentQ:null};
+function joinUser(){
+  const name = $('name').value.trim(); const phone = $('phone').value.trim();
+  if(!name||!phone){alert('নাম ও ফোন দিন');return}
+  session.name=name; session.phone=phone; session.score=0;
+  // ensure user exists in storage
+  const users = LS.get('users')||{}; if(!users[phone]) users[phone]={name:name,paid:false,seen:[],score:0}; else users[phone].name=name; LS.set('users',users);
+  $('player-info').textContent = `${name} • ${phone}`;
+  hide('auth'); show('quiz-area');
+  renderQuestionForUser();
+}
+
+// Question randomizer with no-repeat per user until pool exhausted
+function renderQuestionForUser(){
+  const users = LS.get('users')||{}; const user = users[session.phone] || {seen:[]};
+  // build pool of unseen questions
+  const unseen = QUESTION_BANK.filter(q=>!user.seen.includes(q.id));
+  if(unseen.length===0){ // reset user's seen list
+    user.seen = [];
+    LS.set('users',users);
+    // recompute unseen
+    const unseen2 = QUESTION_BANK.filter(q=>!user.seen.includes(q.id));
+    if(unseen2.length===0){ alert('No questions available. Add more to QUESTION_BANK.'); return; }
+  }
+  const pool = QUESTION_BANK.filter(q=>!user.seen.includes(q.id));
+  // pick random
+  const pick = pool[Math.floor(Math.random()*pool.length)];
+  session.currentQ = pick; session.answered=false;
+  // render
+  $('q-text').textContent = pick.q;
+  const opts = $('opts'); opts.innerHTML='';
+  pick.options.forEach((opt,i)=>{
+    const d = document.createElement('div'); d.className='option'; d.textContent = opt; d.onclick = ()=>selectOption(i);
+    opts.appendChild(d);
+  });
+  $('btn-next').disabled=true;
+  $('score').textContent = session.score;
+}
+
+function selectOption(i){
+  if(session.answered) return; session.answered=true;
+  const correct = session.currentQ.a; if(i===correct){ session.score += 10; alert('সঠিক! +10'); } else { alert('ভুল উত্তর'); }
+  // mark question as seen for user
+  const users = LS.get('users')||{}; users[session.phone].seen = users[session.phone].seen || []; users[session.phone].seen.push(session.currentQ.id); users[session.phone].score = session.score; LS.set('users',users);
+  $('score').textContent = session.score;
+  $('btn-next').disabled=false;
+}
+
+function onNext(){ renderQuestionForUser(); }
+
+function finishQuiz(){
+  // save score
+  const scores = LS.get('scores')||[]; scores.push({name:session.name,phone:session.phone,score:session.score,when:new Date().toISOString(),paid:isUserPaid(session.phone)}); LS.set('scores',scores);
+  // update user score
+  const users = LS.get('users')||{}; users[session.phone].score=session.score; LS.set('users',users);
+  alert('Score saved!');
+  // optionally go back to auth or keep in quiz
+}
+
+// Payment flow
+function submitTxn(){ const txn = $('txn').value.trim(); if(!txn){alert('TXN লাগবে');return}
+  const pending = LS.get('pending')||[]; pending.push({name:session.name,phone:session.phone,txn:txn,amount:CONFIG.premiumAmount,when:new Date().toISOString()}); LS.set('pending',pending); alert('TXN সাবমিট করা হয়েছে। Admin যাচাই করবে।'); $('txn').value=''; hide('pay-modal'); renderAdminLists(); }
+
+function isUserPaid(phone){ const users = LS.get('users')||{}; return users[phone] && users[phone].paid; }
+
+// Admin
+function adminLogin(){ const p = $('admin-pass').value; if(p!==CONFIG.adminPassword){alert('Password ভুল');return} hide('auth'); hide('quiz-area'); show('admin-panel'); renderAdminLists(); }
+
+function renderAdminLists(){ const pending = LS.get('pending')||[]; const users = LS.get('users')||{}; const paidList = Object.keys(users).filter(k=>users[k].paid).map(k=>({phone:k,name:users[k].name,score:users[k].score||0}));
+  const pcont = $('pending'); pcont.innerHTML=''; if(pending.length===0) pcont.innerHTML='<div class="muted small">No pending TXNs</div>'; else pending.forEach((t,i)=>{ const div=document.createElement('div'); div.style.padding='8px'; div.style.borderBottom='1px solid rgba(255,255,255,0.03)'; div.innerHTML=`<div><strong>${t.name}</strong> • ${t.phone}</div><div class='muted small'>txn: ${t.txn} • ৳${t.amount} • ${new Date(t.when).toLocaleString()}</div>`; const btn=document.createElement('button'); btn.textContent='Mark Paid & Unlock'; btn.style.marginTop='6px'; btn.onclick=()=>verifyPayment(i); div.appendChild(btn); pcont.appendChild(div); });
+  const paidEl = $('paid-users'); paidEl.innerHTML=''; if(paidList.length===0) paidEl.innerHTML='<div class="muted small">No paid users yet</div>'; else paidList.forEach(u=>{ const d=document.createElement('div'); d.style.padding='8px'; d.style.borderBottom='1px solid rgba(255,255,255,0.03)'; d.innerHTML=`<div><strong>${u.name}</strong> • ${u.phone} <span style="float:right">Score: ${u.score||0}</span></div>`; paidEl.appendChild(d); }); }
+
+function verifyPayment(index){ const pending = LS.get('pending')||[]; const t = pending.splice(index,1)[0]; LS.set('pending',pending); // mark user paid
+  const users = LS.get('users')||{}; users[t.phone] = users[t.phone] || {name:t.name,seen:[],score:0}; users[t.phone].paid=true; LS.set('users',users); renderAdminLists(); alert('Marked Paid and unlocked for '+t.phone); }
+
+// Contest winners
+function pickWinners(){ const num = parseInt($('num-winners').value)||CONFIG.contest.defaultWinners; const min = parseInt($('min-participants').value)||1; const users = LS.get('users')||{}; const paidPhones = Object.keys(users).filter(k=>users[k].paid);
+  if(paidPhones.length < min){ alert(`Not enough paid participants. Need at least ${min}`); return }
+  // random pick unique
+  const winners = []; const pool = paidPhones.slice(); while(winners.length < Math.min(num,pool.length)){ const i = Math.floor(Math.random()*pool.length); winners.push(pool.splice(i,1)[0]); }
+  // save winners
+  const w = winners.map(p=>({phone:p,name:users[p].name,when:new Date().toISOString()})); LS.set('winners',w); renderWinners(); alert('Winners picked!'); }
+
+function renderWinners(){ const w = LS.get('winners')||[]; const elw = $('winners'); elw.innerHTML=''; if(w.length===0) elw.innerHTML='<div class="muted small">No winners yet</div>'; else w.forEach(item=>{ const d=document.createElement('div'); d.style.padding='8px'; d.style.borderBottom='1px solid rgba(255,255,255,0.03)'; d.innerHTML=`<div><strong>${item.name}</strong> • ${item.phone}</div><div class='muted small'>Won at ${new Date(item.when).toLocaleString()}</div>`; elw.appendChild(d); }); }
+
+function resetDemo(){ if(!confirm('Reset all demo data?')) return; LS.clear(); location.reload(); }
+
+function show(id){ $(id).classList.remove('hidden'); }
+function hide(id){ $(id).classList.add('hidden'); }
+
+init();
+</script></body>
+      </html>
