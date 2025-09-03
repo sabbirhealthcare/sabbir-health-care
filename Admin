@@ -1,0 +1,174 @@
+from flask import Flask, render_template_string, request, redirect, url_for, session
+import sqlite3, os
+
+app = Flask(__name__)
+app.secret_key = "supersecretkey"
+DB_NAME = "database.db"
+
+# -------- DATABASE INIT ----------
+def init_db():
+    if not os.path.exists(DB_NAME):
+        conn = sqlite3.connect(DB_NAME)
+        c = conn.cursor()
+        c.execute("""CREATE TABLE users (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        username TEXT UNIQUE,
+                        password TEXT,
+                        role TEXT)""")
+        c.execute("""CREATE TABLE payments (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        user_id INTEGER,
+                        amount REAL,
+                        method TEXT,
+                        status TEXT)""")
+        # default admin
+        c.execute("INSERT INTO users (username, password, role) VALUES (?,?,?)",
+                  ("admin","admin","admin"))
+        conn.commit()
+        conn.close()
+
+# ----------- TEMPLATES WITH BOOTSTRAP + ADMINLTE ----------
+layout = """
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{ title }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css" rel="stylesheet">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+      {% if session.get('user') %}
+        <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+      {% else %}
+        <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+  <div class="content-wrapper p-4">
+    <section class="content">
+      {{ content|safe }}
+    </section>
+  </div>
+</div>
+</body>
+</html>
+"""
+
+# ---------- ROUTES ---------------
+@app.route("/")
+def index():
+    return render_template_string(layout, title="Home",
+        content="<h2>Welcome to Payment Website</h2><p>Please login or register to continue.</p>")
+
+@app.route("/register", methods=["GET","POST"])
+def register():
+    if request.method=="POST":
+        u,p = request.form["username"], request.form["password"]
+        conn=sqlite3.connect(DB_NAME); c=conn.cursor()
+        try:
+            c.execute("INSERT INTO users (username,password,role) VALUES (?,?,?)",(u,p,"user"))
+            conn.commit()
+        except:
+            return "❌ Username already exists!"
+        conn.close()
+        return redirect(url_for("login"))
+    form = """
+    <div class="card card-primary p-3">
+      <h3>Register</h3>
+      <form method=post>
+        <div class="mb-3"><input class="form-control" name=username placeholder="Username"></div>
+        <div class="mb-3"><input class="form-control" name=password type=password placeholder="Password"></div>
+        <button class="btn btn-success">Register</button>
+      </form>
+    </div>
+    """
+    return render_template_string(layout,title="Register",content=form)
+
+@app.route("/login", methods=["GET","POST"])
+def login():
+    if request.method=="POST":
+        u,p=request.form["username"],request.form["password"]
+        conn=sqlite3.connect(DB_NAME); c=conn.cursor()
+        c.execute("SELECT * FROM users WHERE username=? AND password=?",(u,p))
+        user=c.fetchone(); conn.close()
+        if user:
+            session["user"]=user
+            return redirect(url_for("dashboard"))
+        return "❌ Invalid!"
+    form = """
+    <div class="card card-primary p-3">
+      <h3>Login</h3>
+      <form method=post>
+        <div class="mb-3"><input class="form-control" name=username placeholder="Username"></div>
+        <div class="mb-3"><input class="form-control" name=password type=password placeholder="Password"></div>
+        <button class="btn btn-primary">Login</button>
+      </form>
+    </div>
+    """
+    return render_template_string(layout,title="Login",content=form)
+
+@app.route("/dashboard")
+def dashboard():
+    if "user" not in session: return redirect(url_for("login"))
+    user=session["user"]
+    if user[3]=="admin":
+        conn=sqlite3.connect(DB_NAME); c=conn.cursor()
+        c.execute("SELECT payments.id, users.username, payments.amount, payments.method, payments.status FROM payments LEFT JOIN users ON payments.user_id = users.id")
+        rows=c.fetchall(); conn.close()
+        table = """
+        <div class="card card-info p-3">
+          <h3>Admin Dashboard</h3>
+          <table class="table table-bordered table-striped">
+            <thead><tr><th>ID</th><th>User</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead>
+            <tbody>
+            {% for r in rows %}
+              <tr><td>{{r[0]}}</td><td>{{r[1]}}</td><td>{{r[2]}}</td><td>{{r[3]}}</td><td>{{r[4]}}</td></tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        """
+        return render_template_string(layout,title="Admin Dashboard",content=table,rows=rows)
+    else:
+        form = """
+        <div class="card card-success p-3">
+          <h3>User Dashboard</h3>
+          <form method=post action='/pay'>
+            <div class="mb-3"><input class="form-control" name=amount placeholder="Enter amount"></div>
+            <div class="mb-3">
+              <select class="form-control" name=method>
+                <option>Bkash</option><option>Nagad</option>
+              </select>
+            </div>
+            <button class="btn btn-warning">Submit Payment</button>
+          </form>
+        </div>
+        """
+        return render_template_string(layout,title="User Dashboard",content=form)
+
+@app.route("/pay", methods=["POST"])
+def pay():
+    if "user" not in session: return redirect(url_for("login"))
+    user=session["user"]
+    amount=request.form["amount"]; method=request.form["method"]
+    conn=sqlite3.connect(DB_NAME); c=conn.cursor()
+    c.execute("INSERT INTO payments (user_id,amount,method,status) VALUES (?,?,?,?)",
+              (user[0],amount,method,"Pending"))
+    conn.commit(); conn.close()
+    return redirect(url_for("dashboard"))
+
+@app.route("/logout")
+def logout():
+    session.pop("user",None)
+    return redirect(url_for("index"))
+
+if __name__=="__main__":
+    init_db()
+    app.run(debug=True)
